@@ -29,13 +29,15 @@ export default function WaitlistForm() {
   const formRef = useRef<HTMLFormElement>(null)
   const [selectedRole, setSelectedRole] = useState<string>("")
   const [fileName, setFileName] = useState<string>("")
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const handleSubmit = async (formData: FormData) => {
     const response = await joinWaitlist(formData)
 
     if (response.success) {
+      setIsSubmitted(true)
       toast({
-        title: "Success!",
+        title: "Welcome to the Waitlist! 🎉",
         description: response.message,
       })
       // Reset the form
@@ -57,6 +59,22 @@ export default function WaitlistForm() {
     } else {
       setFileName("")
     }
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="space-y-6 bg-white p-6 rounded-lg shadow-md text-center">
+        <h2 className="text-2xl font-bold text-gray-900">Thank You for Joining! 🎉</h2>
+        <p className="text-gray-600">
+          We're cooking up something special! We'll notify you when we're ready to launch.
+        </p>
+        <div className="pt-4">
+          <p className="text-sm text-gray-500">
+            Keep an eye on your inbox for updates about beta testing and our official launch.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
