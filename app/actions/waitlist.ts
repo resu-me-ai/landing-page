@@ -14,7 +14,8 @@ const WaitlistSchema = z.object({
   willPay: z.enum(["yes", "no"], {
     required_error: "Please select an option",
   }),
-  // We'll handle the resume file separately
+  thoughts: z.string().max(500).optional(),
+  contactConsent: z.boolean().optional(),
 })
 
 export type WaitlistFormData = z.infer<typeof WaitlistSchema>
@@ -35,9 +36,20 @@ export async function joinWaitlist(formData: FormData): Promise<WaitlistResponse
     const roleType = formData.get("roleType") as string
     const customRole = formData.get("customRole") as string
     const willPay = formData.get("willPay") as string
+    const thoughts = formData.get("thoughts") as string
+    const contactConsent = formData.get("contactConsent") === "on"
     const resumeFile = formData.get("resume") as File | null
 
-    console.log('Form data extracted:', { firstName, lastName, email, roleType, customRole, willPay })
+    console.log('Form data extracted:', {
+      firstName,
+      lastName,
+      email,
+      roleType,
+      customRole,
+      willPay,
+      thoughts,
+      contactConsent
+    })
 
     // Validate form data
     const validatedFields = WaitlistSchema.safeParse({
@@ -47,6 +59,8 @@ export async function joinWaitlist(formData: FormData): Promise<WaitlistResponse
       roleType,
       customRole: roleType === "other" ? customRole : undefined,
       willPay,
+      thoughts,
+      contactConsent,
     })
 
     if (!validatedFields.success) {
@@ -111,6 +125,8 @@ export async function joinWaitlist(formData: FormData): Promise<WaitlistResponse
           role_type: roleType,
           custom_role: customRole,
           will_pay: willPay,
+          thoughts: thoughts || null,
+          contact_consent: contactConsent || false,
           resume_url: resumeUrl,
           joined_at: new Date().toISOString(),
         }

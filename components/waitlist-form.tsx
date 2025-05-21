@@ -160,6 +160,32 @@ export default function WaitlistForm() {
         </RadioGroup>
       </div>
 
+      <div className="space-y-2">
+        <Label htmlFor="thoughts">Do you have an idea, story or thoughts to share? We would love to hear it!</Label>
+        <textarea
+          id="thoughts"
+          name="thoughts"
+          className="w-full min-h-[100px] p-2 border rounded-md"
+          placeholder="Share your thoughts here (up to 500 characters)..."
+          maxLength={500}
+        />
+        <p className="text-xs text-gray-500">Maximum 500 characters</p>
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="contactConsent"
+            name="contactConsent"
+            className="h-4 w-4 rounded border-gray-300"
+          />
+          <Label htmlFor="contactConsent" className="font-normal">
+            I would like someone to reach out to me
+          </Label>
+        </div>
+      </div>
+
       <SubmitButton />
     </form>
   )
